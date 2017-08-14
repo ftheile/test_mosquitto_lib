@@ -1,0 +1,3 @@
+# mosquitto_client
+
+A small example how to iuse the mosquitto MQTT library...
