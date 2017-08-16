@@ -5,6 +5,7 @@
 
 struct cli {
 	struct mosquitto* mosq;
+	// Other client data...
 };
 
 static struct cli theClient;
@@ -39,6 +40,7 @@ int main()
 	mosquitto_lib_init();
 	cli_init(&theClient);
 
+	// Generate simulated measurements and publish them:
 	for (i=0; i<MAX_SAMPLES; i++) {
 		float temp = 10 * sin(i * 2 * M_PI / MAX_SAMPLES);
 		cli_publish(&theClient, temp);
