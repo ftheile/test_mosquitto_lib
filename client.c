@@ -19,7 +19,7 @@ void cli_publish(struct cli* me, float temp)
 {
 #ifdef BINARY_TRANSFER
 	mosquitto_publish(me->mosq, NULL, "sensors/temperature", sizeof(temp), &temp, me->qos, false);
-	printf("%f\n", temp);
+	printf("%.1f\n", temp);
 #else
 	char payload[8];
 	int len;
