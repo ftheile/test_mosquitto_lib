@@ -10,10 +10,10 @@ struct cli {
 
 static struct cli theClient;
 
-static void cli_init(struct cli* me)
+static void cli_init(struct cli* me, const char* brokerURL)
 {
 	me->mosq = mosquitto_new(NULL, true, me);
-	mosquitto_connect(me->mosq, "localhost", 1883, 60);
+	mosquitto_connect(me->mosq, brokerURL, 1883, 60);
 }
 
 static void cli_cleanup(struct cli* me)
@@ -33,22 +33,28 @@ static void cli_publish(struct cli* me, float temp)
 
 #define MAX_SAMPLES 20
 
-int main()
+int main(int argc, char* argv[])
 {
-	int i;
+	if (argc < 2) {
+		printf("Usage:\n");
+		printf("  %s <broker URL>\n", argv[0]);
+		return -1;
+	} else {
+		int i;
 
-	mosquitto_lib_init();
-	cli_init(&theClient);
+		mosquitto_lib_init();
+		cli_init(&theClient, argv[1]);
 
-	// Generate simulated measurements and publish them:
-	for (i=0; i<MAX_SAMPLES; i++) {
-		float temp = 10 * sin(i * 2 * M_PI / MAX_SAMPLES);
-		cli_publish(&theClient, temp);
-		sleep(1);
+		// Generate simulated measurements and publish them:
+		for (i=0; i<MAX_SAMPLES; i++) {
+			float temp = 10 * sin(i * 2 * M_PI / MAX_SAMPLES);
+			cli_publish(&theClient, temp);
+			sleep(1);
+		}
+
+		cli_cleanup(&theClient);
+		mosquitto_lib_cleanup();
+
+		return 0;
 	}
-
-	cli_cleanup(&theClient);
-	mosquitto_lib_cleanup();
-
-	return 0;
 }
