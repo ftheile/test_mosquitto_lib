@@ -4,11 +4,12 @@ dep = $(obj:.o=.d)  # one dependency file for each source
 
 CFLAGS = -Wall
 LDFLAGS = -lm -lmosquitto
+PROG_NAME = mosquitto_client
 
 .PHONY: all
-all: mosquitto_client
+all: $(PROG_NAME)
 
-mosquitto_client: $(obj)
+$(PROG_NAME): $(obj)
 	$(CC) -o $@ $^ $(LDFLAGS)
 
 -include $(dep)   # include all dep files in the makefile
@@ -20,7 +21,7 @@ mosquitto_client: $(obj)
 
 .PHONY: clean
 clean:
-	rm -f $(obj) sd2_read
+	rm -f $(obj) $(PROG_NAME)
 
 .PHONY: cleandep
 cleandep:
