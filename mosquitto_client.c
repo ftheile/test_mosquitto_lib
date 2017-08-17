@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 static struct cli theClient;
 
@@ -10,15 +11,15 @@ static struct cli theClient;
 
 int main(int argc, char* argv[])
 {
-	if (argc < 2) {
+	if (argc < 3) {
 		printf("Usage:\n");
-		printf("  %s <broker URL>\n", argv[0]);
+		printf("  %s <broker URL> <QoS>\n", argv[0]);
 		return -1;
 	} else {
 		int i;
 
 		mosquitto_lib_init();
-		cli_init(&theClient, argv[1]);
+		cli_init(&theClient, argv[1], atoi(argv[2]));
 
 		// Generate simulated measurements and publish them:
 		for (i=0; i<MAX_SAMPLES; i++) {
