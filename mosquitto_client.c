@@ -19,16 +19,17 @@ int main(int argc, char* argv[])
 		int i;
 
 		mosquitto_lib_init();
-		cli_init(&theClient, argv[1], atoi(argv[2]));
+		if (cli_init(&theClient, argv[1], atoi(argv[2]))) {
 
-		// Generate simulated measurements and publish them:
-		for (i=0; i<MAX_SAMPLES; i++) {
-			float temp = 10 * sin(i * 2 * M_PI / MAX_SAMPLES);
-			cli_publish(&theClient, temp);
-			sleep(1);
+			// Generate simulated measurements and publish them:
+			for (i=0; i<MAX_SAMPLES; i++) {
+				float temp = 10 * sin(i * 2 * M_PI / MAX_SAMPLES);
+				cli_publish(&theClient, temp);
+				sleep(1);
+			}
+
+			cli_cleanup(&theClient);
 		}
-
-		cli_cleanup(&theClient);
 		mosquitto_lib_cleanup();
 
 		return 0;
