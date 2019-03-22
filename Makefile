@@ -3,7 +3,7 @@ obj = $(src:.c=.o)
 dep = $(obj:.o=.d)  # one dependency file for each source
 
 CFLAGS = -Wall -Wextra
-LDFLAGS = -lm -lmosquitto
+LDFLAGS = `pkg-config --libs libmosquitto` -lm
 PROG_NAME = mosquitto_client
 
 .PHONY: all
